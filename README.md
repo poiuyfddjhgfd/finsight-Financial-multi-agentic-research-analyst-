@@ -1,11 +1,22 @@
 # 🔍 FinSight — Multi-Agent Financial Research Analyst
 
-> An AI-powered stock research platform built with a hierarchical multi-agent architecture. Enter any company name and get a comprehensive financial report in seconds.
+> An AI-powered full-stack stock research platform built with a hierarchical multi-agent architecture. Enter any company name and get a comprehensive financial report in seconds.
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue?style=flat-square&logo=python)
-![Gradio](https://img.shields.io/badge/Gradio-4.x-orange?style=flat-square)
-![yfinance](https://img.shields.io/badge/yfinance-0.2.x-green?style=flat-square)
-![Deployed](https://img.shields.io/badge/Deployed-Railway-purple?style=flat-square)
+![React](https://img.shields.io/badge/React-18.x-61dafb?style=flat-square&logo=react)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?style=flat-square&logo=fastapi)
+![Vercel](https://img.shields.io/badge/Frontend-Vercel-black?style=flat-square&logo=vercel)
+![Railway](https://img.shields.io/badge/Backend-Railway-purple?style=flat-square)
+
+---
+
+## 🌐 Live Demo
+
+| Layer | URL |
+|-------|-----|
+| 🎨 React Frontend | [finsight-financial-multi-agentic-research-analyst-472juvvpk.vercel.app](https://finsight-financial-multi-agentic-research-analyst-472juvvpk.vercel.app/) |
+| ⚙️ FastAPI Backend | [Railway Deployment](https://finsight-financial-multi-agentic-research-analys-production.up.railway.app) |
+| 📖 API Docs | [/docs](https://finsight-financial-multi-agentic-research-analys-production.up.railway.app/docs) |
 
 ---
 
@@ -24,7 +35,7 @@
 
 ## 🧠 What is FinSight?
 
-FinSight is a **Multi-Agent Financial Research System** that orchestrates 4 specialized AI agents to produce a comprehensive stock analysis report — covering technical indicators, fundamental health, and news sentiment — for any publicly traded company worldwide.
+FinSight is a **Full-Stack Multi-Agent Financial Research System** that orchestrates 4 specialized AI agents to produce a comprehensive stock analysis report — covering technical indicators, fundamental health, and news sentiment — for any publicly traded company worldwide.
 
 ---
 
@@ -32,6 +43,10 @@ FinSight is a **Multi-Agent Financial Research System** that orchestrates 4 spec
 
 ```
 User Input: "Apple" or "AAPL"
+        ↓
+React Frontend (Vercel)
+        ↓ POST /analyze
+FastAPI Backend (Railway)
         ↓
   Name Resolver (yfinance Search)
         ↓
@@ -44,7 +59,7 @@ Collector  Analyst      Analyst        Agent
            MACD)        Revenue)
   └─────────┴──────────────┴──────────────┘
                     ↓
-            Final Report (Gradio UI)
+            JSON Response → React UI
 ```
 
 ---
@@ -59,6 +74,8 @@ Collector  Analyst      Analyst        Agent
 | 📰 Sentiment Analysis | VADER NLP on user-provided headlines with score visualization |
 | 💱 Multi-Currency | Automatically detects USD, INR, EUR, GBP |
 | 🌍 Global Stocks | Works with NSE (India), NASDAQ, NYSE, LSE and more |
+| ⚡ REST API | FastAPI backend with Swagger docs |
+| 🎨 Modern UI | React.js dark theme with tabbed analysis |
 
 ---
 
@@ -66,11 +83,13 @@ Collector  Analyst      Analyst        Agent
 
 | Layer | Technology |
 |-------|-----------|
+| Frontend | `React.js` |
+| Backend | `FastAPI` |
 | Data | `yfinance` |
 | NLP Sentiment | `vaderSentiment` |
-| UI | `Gradio` |
-| Deployment | `Railway.app` |
-| Language | `Python 3.10+` |
+| Frontend Deploy | `Vercel` |
+| Backend Deploy | `Railway.app` |
+| Language | `Python 3.10+`, `JavaScript` |
 
 ---
 
@@ -87,11 +106,15 @@ finsight/
 ├── tools/
 │   ├── indicators.py          # RSI, SMA, MACD calculation logic
 │   └── name_resolver.py       # Company name → ticker symbol
+├── frontend/
+│   └── src/
+│       └── App.js             # React frontend
 ├── assets/
 │   ├── Technical.png
 │   ├── fundamental.png
 │   └── sentiments.png
-├── app.py                     # Gradio UI
+├── app.py                     # Gradio UI (alternative)
+├── main.py                    # FastAPI backend
 ├── requirements.txt
 └── README.md
 ```
@@ -100,36 +123,38 @@ finsight/
 
 ## 🔧 Local Setup
 
-### 1. Clone the repository
+### Backend
+
 ```bash
 git clone https://github.com/poiuyfddjhgfd/finsight-Financial-multi-agentic-research-analyst-.git
 cd finsight-Financial-multi-agentic-research-analyst-
-```
 
-### 2. Create virtual environment
-```bash
 python -m venv venv
 venv\Scripts\activate      # Windows
 source venv/bin/activate   # Mac/Linux
-```
 
-### 3. Install dependencies
-```bash
 pip install -r requirements.txt
 ```
 
-### 4. Setup environment variables
-Create a `.env` file:
+Create `.env` file:
 ```
 GROQ_API_KEY=your_groq_api_key_here
 ```
-Get your free Groq API key at: [console.groq.com](https://console.groq.com)
 
-### 5. Run the app
+Run FastAPI:
 ```bash
-python app.py
+uvicorn main:app --reload
 ```
-Open `http://localhost:7860` in your browser.
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+Open `http://localhost:3000`
 
 ---
 
@@ -159,20 +184,12 @@ Technical Analysis (AAPL)
 Fundamental Analysis
 ├── Market Cap: $4,810.11 Billion
 ├── Revenue Growth (YoY): +6.43%
-└── 52-Week Range: $201.50 — $323.45
+└── 52-Week Range: $201.50 — $328.73
 
 Sentiment Analysis
 ├── Overall: NEGATIVE
 └── Score: -0.113 / 1.0
 ```
-
----
-
-## 🌐 Deployment
-
-Deployed on **Railway.app** with auto-deploy from GitHub.
-
-Live URL: `https://finsight-financial-multi-agentic-research-analys-production.up.railway.app`
 
 ---
 
