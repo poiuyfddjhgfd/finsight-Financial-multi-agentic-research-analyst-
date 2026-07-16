@@ -129,4 +129,7 @@ with gr.Blocks() as demo:
     )
 
 if __name__ == "__main__":
-    demo.launch(theme=gr.themes.Soft(), share=False)
+    demo.launch(
+        server_name="0.0.0.0",  # ← ye zaroori hai Railway ke liye
+        server_port=7860
+    )
