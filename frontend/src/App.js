@@ -304,7 +304,7 @@ export default function App() {
         {!report && !loading && !error && (
           <div style={styles.placeholder}>Enter a company name and click Run Analysis to get started</div>
         )}
-      </div>
+      </div>   
     </div>
   );
 }
