@@ -2,7 +2,9 @@ from agents.data_collector import DataCollectorAgent
 from agents.technical import TechnicalAnalystAgent
 from agents.fundamental import FundamentalAnalystAgent
 from agents.sentiment import SentimentAgent
-
+import os
+from dotenv import load_dotenv
+load_dotenv()
 class FinSightOrchestrator:
     def __init__(self, symbol):
         self.symbol = symbol
