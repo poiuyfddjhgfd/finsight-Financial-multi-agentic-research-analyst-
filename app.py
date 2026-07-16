@@ -17,7 +17,11 @@ def convert_numpy(obj):
 
 def analyze_stock(company_input, headlines_text):
     if not company_input:
-        error = "<div style='color:#ff4d4d; background-color: #0a1a0f; padding:10px; border-radius: 4px; border: 1px solid #ff4d4d;'>Please enter a valid company name or ticker.</div>"
+        error = """
+        <div style='background: linear-gradient(135deg, #1f1015, #110609); border-left: 4px solid #ff4d4d; border-radius: 12px; padding: 20px; color: #ff9999; font-family: "Segoe UI", sans-serif; box-shadow: 0 4px 15px rgba(255, 77, 77, 0.15);'>
+            <b style='color: #ff4d4d;'>⚠️ Error:</b> Please enter a valid company name or ticker.
+        </div>
+        """
         return error, error, error
     
     # Headlines formatting
@@ -52,18 +56,18 @@ def analyze_stock(company_input, headlines_text):
         else:
             c_symbol = f"{currency_code} "
             
-        # --- Finance Green Custom Theme Styling ---
-        # Background: #0a1a0f (Dark Green), Text: #e0ffe0, Accents/Borders: #00ff88 (Bright Green)
+        # --- Modern Premium Dashboard Style Card Structure ---
+        # Background: Gradient (#16213e to #0f3460), Border-left accent: #00b894 (Mint Green)
         
         # --- 1. Technical Formatting ---
         tech = report['technical_analysis']
         tech_html = f"""
-        <div style="padding: 15px; border-left: 5px solid #00ff88; background-color: #0a1a0f; color: #e0ffe0; margin-bottom: 10px; font-family: Arial, sans-serif; border-radius: 4px;">
-            <h3 style="color: #00ff88; margin-top: 0;">📈 Price & Indicators ({ticker})</h3>
-            <p><b>Current Price:</b> {c_symbol}{tech['current_price']:.2f}</p>
-            <p><b>RSI (14):</b> {tech['rsi']['value']:.2f} — <span style="color:{'#ff4d4d' if 'Sell' in tech['rsi']['signal'] else '#00ff88'}"><b>{tech['rsi']['signal']}</b></span></p>
-            <p><b>SMA (20):</b> {tech['sma']['value']:.2f} — <b style="color: #00ff88;">{tech['sma']['signal']}</b></p>
-            <p><b>MACD:</b> Line: {tech['macd']['macd_line']:.2f} | Signal: {tech['macd']['signal_line']:.2f} — <b style="color: #00ff88;">{tech['macd']['signal']}</b></p>
+        <div style="background: linear-gradient(135deg, #16213e, #0f3460); border-left: 4px solid #00b894; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 184, 148, 0.2); color: white; padding: 20px; font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6;">
+            <h3 style="color: #00b894; margin-top: 0; font-size: 1.3rem; border-bottom: 1px solid rgba(0,184,148,0.2); padding-bottom: 8px;">📈 Technical Insights ({ticker})</h3>
+            <p style="margin: 10px 0;"><b>Current Price:</b> <span style="font-size: 1.1rem; color: #00cec9;">{c_symbol}{tech['current_price']:.2f}</span></p>
+            <p style="margin: 10px 0;"><b>RSI (14):</b> {tech['rsi']['value']:.2f} — <span style="color:{'#ff7675' if 'Sell' in tech['rsi']['signal'] else '#00b894'}; font-weight: bold;">{tech['rsi']['signal']}</span></p>
+            <p style="margin: 10px 0;"><b>SMA (20):</b> {tech['sma']['value']:.2f} — <b style="color: #00cec9;">{tech['sma']['signal']}</b></p>
+            <p style="margin: 10px 0;"><b>MACD Status:</b> Line: {tech['macd']['macd_line']:.2f} | Signal: {tech['macd']['signal_line']:.2f} — <b style="color: #00b894;">{tech['macd']['signal']}</b></p>
         </div>
         """
         
@@ -72,51 +76,76 @@ def analyze_stock(company_input, headlines_text):
         mcap_str = f"{c_symbol}{mcap_val:,.2f} Billion" if isinstance(mcap_val, (int, float)) else str(mcap_val)
         
         fund_html = f"""
-        <div style="padding: 15px; border-left: 5px solid #00cc66; background-color: #0a1a0f; color: #e0ffe0; margin-bottom: 10px; font-family: Arial, sans-serif; border-radius: 4px;">
-            <h3 style="color: #00cc66; margin-top: 0;">📊 Company Health</h3>
-            <p><b>Market Cap:</b> {mcap_str}</p>
-            <p><b>Revenue Growth:</b> {fund['revenue_growth_pct']:.2f}%</p>
-            <p><b>52-Week Range:</b> {c_symbol}{fund['52_week_low']:.2f} - {c_symbol}{fund['52_week_high']:.2f}</p>
+        <div style="background: linear-gradient(135deg, #16213e, #0f3460); border-left: 4px solid #00cec9; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 206, 201, 0.2); color: white; padding: 20px; font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6;">
+            <h3 style="color: #00cec9; margin-top: 0; font-size: 1.3rem; border-bottom: 1px solid rgba(0,206,201,0.2); padding-bottom: 8px;">📊 Fundamental Health</h3>
+            <p style="margin: 10px 0;"><b>Market Cap:</b> {mcap_str}</p>
+            <p style="margin: 10px 0;"><b>Revenue Growth (YoY):</b> <span style="color: {'#00b894' if fund['revenue_growth_pct'] >= 0 else '#ff7675'}; font-weight: bold;">{fund['revenue_growth_pct']:.2f}%</span></p>
+            <p style="margin: 10px 0;"><b>52-Week High/Low:</b> {c_symbol}{fund['52_week_low']:.2f} - {c_symbol}{fund['52_week_high']:.2f}</p>
         </div>
         """
         
         # --- 3. Sentiment Formatting ---
         sent = report['sentiment_analysis']
-        sent_color = "#00ff88" if sent['sentiment'] == "Positive" else "#ff4d4d" if sent['sentiment'] == "Negative" else "#ff9f43"
+        sent_color = "#00b894" if sent['sentiment'] == "Positive" else "#ff7675" if sent['sentiment'] == "Negative" else "#ffeaa7"
         
         sent_html = f"""
-        <div style="padding: 15px; border-left: 5px solid #00ff88; background-color: #0a1a0f; color: #e0ffe0; margin-bottom: 10px; font-family: Arial, sans-serif; border-radius: 4px;">
-            <h3 style="color: #00ff88; margin-top: 0;">📰 News Sentiment</h3>
-            <p><b>Overall Sentiment:</b> <span style="color:{sent_color}"><b>{sent['sentiment']}</b></span></p>
-            <p><b>Average Sentiment Score:</b> {sent['average_score']:.3f}</p>
-            <p><b>Headlines Analyzed:</b> {sent['headlines_analyzed']}</p>
+        <div style="background: linear-gradient(135deg, #16213e, #0f3460); border-left: 4px solid {sent_color}; border-radius: 12px; box-shadow: 0 4px 15px rgba(255, 255, 255, 0.05); color: white; padding: 20px; font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6;">
+            <h3 style="color: {sent_color}; margin-top: 0; font-size: 1.3rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;">📰 Intelligence Sentiment</h3>
+            <p style="margin: 10px 0;"><b>Overall Market Tone:</b> <span style="color:{sent_color}; font-weight: bold; text-transform: uppercase;">{sent['sentiment']}</span></p>
+            <p style="margin: 10px 0;"><b>Avg Sentiment Score:</b> {sent['average_score']:.3f}</p>
+            <p style="margin: 10px 0;"><b>Total Sample Headlines:</b> {sent['headlines_analyzed']}</p>
         </div>
         """
         
         return tech_html, fund_html, sent_html
         
     except Exception as e:
-        error_msg = f"<div style='color:#ff4d4d; background-color: #0a1a0f; padding:10px; font-family: Arial; border-radius: 4px; border: 1px solid #ff4d4d;'><b>Error occurred:</b> {str(e)}</div>"
+        error_msg = f"""
+        <div style='background: linear-gradient(135deg, #1f1015, #110609); border-left: 4px solid #ff4d4d; border-radius: 12px; padding: 20px; color: #ff9999; font-family: "Segoe UI", sans-serif;'>
+            <b style='color: #ff4d4d;'>Execution Error:</b> {str(e)}
+        </div>
+        """
         return error_msg, error_msg, error_msg
 
-# --- Gradio UI Layout with Custom Dark Finance Dashboard Style ---
+# --- Custom Premium Dark CSS Stylesheet Inject ---
 custom_css = """
 .gradio-container {
-    background-color: #050d07 !important;
-    color: #00ff88 !important;
+    background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%) !important;
+    font-family: 'Segoe UI', Roboto, sans-serif !important;
 }
-label, .gr-form, .gr-box, p, h1, h2, h3 {
-    color: #e0ffe0 !important;
+.gr-button-primary {
+    background: linear-gradient(90deg, #00b894, #00cec9) !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-weight: bold !important;
+    color: #0f0f1a !important;
+    font-size: 15px !important;
+    transition: all 0.3s ease !important;
+}
+.gr-button-primary:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 5px 15px rgba(0, 206, 201, 0.4) !important;
 }
 input, textarea {
-    background-color: #0a1a0f !important;
-    color: #ffffff !important;
-    border: 1px solid #00cc66 !important;
+    background-color: #16213e !important;
+    border: 1px solid rgba(0, 184, 148, 0.3) !important;
+    color: white !important;
+    border-radius: 8px !important;
 }
-button.primary {
-    background: linear-gradient(45deg, #00cc66, #00ff88) !important;
-    color: #050d07 !important;
-    font-weight: bold !important;
+input:focus, textarea:focus {
+    border-color: #00cec9 !important;
+}
+h1 {
+    background: linear-gradient(90deg, #00b894, #00cec9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800 !important;
+}
+label, p, span, th, td {
+    color: #b2bec3 !important;
+}
+.tabs {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 """
 
@@ -130,22 +159,22 @@ with gr.Blocks(css=custom_css) as demo:
             headlines_input = gr.TextArea(
                 label="Recent Headlines (One per line)", 
                 placeholder="Apple reports record breaking revenue this quarter\nApple faces antitrust lawsuit from European regulators",
-                lines=5,
+                lines=6,
                 value="Apple reports record breaking revenue this quarter\nApple faces antitrust lawsuit from European regulators"
             )
             analyze_btn = gr.Button("🚀 Run Multi-Agent Analysis", variant="primary")
             
         with gr.Column(scale=2):
-            gr.Markdown("### 📋 Analysis Results")
+            gr.Markdown("### 📋 Aggregated Analysis Reports")
             with gr.Tabs():
                 with gr.TabItem("📈 Technical Analysis"):
-                    tech_output = gr.HTML(value="<div style='color: #8cc499;'>Submit analysis to view technical indicators.</div>")
+                    tech_output = gr.HTML(value="<div style='color: #636e72; font-style: italic; padding: 10px;'>Submit data to run pipeline agents...</div>")
                 with gr.TabItem("📊 Fundamental Analysis"):
-                    fund_output = gr.HTML(value="<div style='color: #8cc499;'>Submit analysis to view company metrics.</div>")
+                    fund_output = gr.HTML(value="<div style='color: #636e72; font-style: italic; padding: 10px;'>Submit data to run pipeline agents...</div>")
                 with gr.TabItem("📰 Sentiment Analysis"):
-                    sent_output = gr.HTML(value="<div style='color: #8cc499;'>Submit analysis to view news sentiment.</div>")
+                    sent_output = gr.HTML(value="<div style='color: #636e72; font-style: italic; padding: 10px;'>Submit data to run pipeline agents...</div>")
 
-    # Click Trigger Event
+    # Wire up the event handler
     analyze_btn.click(
         fn=analyze_stock, 
         inputs=[company_input, headlines_input], 
